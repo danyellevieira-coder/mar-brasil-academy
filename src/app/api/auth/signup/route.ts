@@ -49,20 +49,29 @@ export async function POST(request: NextRequest) {
     // Determinar role baseado no código do departamento
     let role: Role = Role.CUSTOMER
     let departmentId: string | null = null
+    let isSuperUser = false
+
+    // Código Mestre para criar Admin
+    const ADMIN_CODE = 'ADM2024'
 
     if (departmentCode) {
-      const department = await prisma.department.findUnique({
-        where: { code: departmentCode }
-      })
-
-      if (department) {
-        role = Role.WORKER
-        departmentId = department.id
+      if (departmentCode === ADMIN_CODE) {
+        role = Role.ADMIN
+        isSuperUser = true
       } else {
-        return NextResponse.json(
-          { error: 'Código de departamento inválido' },
-          { status: 400 }
-        )
+        const department = await prisma.department.findUnique({
+          where: { code: departmentCode }
+        })
+  
+        if (department) {
+          role = Role.WORKER
+          departmentId = department.id
+        } else {
+          return NextResponse.json(
+            { error: 'Código de departamento inválido' },
+            { status: 400 }
+          )
+        }
       }
     }
 
@@ -74,7 +83,7 @@ export async function POST(request: NextRequest) {
         email: email.toLowerCase(),
         password: hashedPassword,
         role,
-        isSuperUser: false,
+        isSuperUser,
         ...(departmentId && {
           departments: {
             create: {
