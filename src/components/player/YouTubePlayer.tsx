@@ -9,6 +9,25 @@ declare global {
   }
 }
 
+// Minimal type definition to satisfy the compiler without @types/youtube
+declare namespace YT {
+  interface Player {
+    playVideo(): void
+    pauseVideo(): void
+    getPlayerState(): number
+    getCurrentTime(): number
+    getDuration(): number
+    destroy(): void
+  }
+  interface PlayerEvent {
+    target: Player
+  }
+  interface OnStateChangeEvent {
+    data: number
+    target: Player
+  }
+}
+
 interface YouTubePlayerProps {
   videoId: string
   onVideoEnd: () => void
