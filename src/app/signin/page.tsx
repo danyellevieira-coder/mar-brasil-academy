@@ -60,22 +60,22 @@ function SignInForm() {
   }
 
   return (
-    <div className="min-h-screen bg-[var(--background)] flex items-center justify-center px-4">
+    <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center px-4 font-sans text-[#fafafa]">
       <div className="w-full max-w-md">
         {/* Logo */}
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-[var(--accent)]">
             Mar Brasil Academy
           </h1>
-          <p className="text-[var(--foreground-muted)] mt-2">Acesse sua conta</p>
+          <p className="text-[#737373] mt-2">Acesse sua conta</p>
         </div>
 
         {/* Card */}
-        <div className="bg-[var(--surface)] backdrop-blur-xl rounded-2xl p-8 shadow-2xl border border-[var(--border)]">
+        <div className="bg-[#1a1a1a] rounded-2xl p-8 border border-[#262626]">
           <form onSubmit={handleSubmit} className="space-y-5">
             {/* Email */}
             <div>
-              <label className="block text-sm font-medium text-[var(--foreground-secondary)] mb-2">
+              <label className="block text-sm font-medium text-[#a3a3a3] mb-2">
                 Email
               </label>
               <input
@@ -84,14 +84,14 @@ function SignInForm() {
                 value={formData.email}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-3 bg-[var(--background)] border border-[var(--border)] rounded-lg text-[var(--foreground)] placeholder-[var(--foreground-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent transition-all"
+                className="w-full px-4 py-3 bg-[#0a0a0a] border border-[#262626] rounded-lg text-white placeholder-[#404040] focus:outline-none focus:border-[var(--accent)] transition-all"
                 placeholder="seu@email.com"
               />
             </div>
 
             {/* Senha */}
             <div>
-              <label className="block text-sm font-medium text-[var(--foreground-secondary)] mb-2">
+              <label className="block text-sm font-medium text-[#a3a3a3] mb-2">
                 Senha
               </label>
               <input
@@ -100,22 +100,22 @@ function SignInForm() {
                 value={formData.password}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-3 bg-[var(--background)] border border-[var(--border)] rounded-lg text-[var(--foreground)] placeholder-[var(--foreground-muted)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)] focus:border-transparent transition-all"
+                className="w-full px-4 py-3 bg-[#0a0a0a] border border-[#262626] rounded-lg text-white placeholder-[#404040] focus:outline-none focus:border-[var(--accent)] transition-all"
                 placeholder="••••••••"
               />
             </div>
 
             {/* Sucesso */}
             {success && (
-              <div className="bg-emerald-500/10 border border-emerald-500/50 rounded-lg p-3">
-                <p className="text-emerald-500 dark:text-emerald-400 text-sm text-center">{success}</p>
+              <div className="bg-[var(--success)]/10 border border-[var(--success)]/50 rounded-lg p-3">
+                <p className="text-[var(--success)] text-sm text-center">{success}</p>
               </div>
             )}
 
             {/* Erro */}
             {error && (
-              <div className="bg-red-500/10 border border-red-500/50 rounded-lg p-3">
-                <p className="text-red-500 dark:text-red-400 text-sm text-center">{error}</p>
+              <div className="bg-[var(--error)]/10 border border-[var(--error)]/50 rounded-lg p-3">
+                <p className="text-[var(--error)] text-sm text-center">{error}</p>
               </div>
             )}
 
@@ -123,7 +123,7 @@ function SignInForm() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 bg-gradient-to-r from-[var(--accent)] to-[var(--accent-gold)] text-white font-semibold rounded-lg hover:brightness-110 focus:outline-none focus:ring-2 focus:ring-[var(--accent)] focus:ring-offset-2 focus:ring-offset-[var(--background)] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-full py-3 bg-[var(--accent)] text-white font-semibold rounded-lg hover:bg-[var(--accent-hover)] focus:outline-none focus:ring-2 focus:ring-[var(--accent)] focus:ring-offset-2 focus:ring-offset-[#1a1a1a] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {loading ? (
                 <span className="flex items-center justify-center gap-2">
@@ -141,15 +141,15 @@ function SignInForm() {
 
           {/* Divider */}
           <div className="flex items-center gap-4 my-6">
-            <div className="flex-1 h-px bg-[var(--border)]"></div>
-            <span className="text-[var(--foreground-muted)] text-sm">ou</span>
-            <div className="flex-1 h-px bg-[var(--border)]"></div>
+            <div className="flex-1 h-px bg-[#262626]"></div>
+            <span className="text-[#737373] text-sm">ou</span>
+            <div className="flex-1 h-px bg-[#262626]"></div>
           </div>
 
           {/* Guest Button */}
           <Link
             href="/"
-            className="w-full py-3 bg-[var(--surface-elevated)] border border-[var(--border)] text-[var(--foreground)] font-medium rounded-lg hover:bg-[var(--border)] transition-all flex items-center justify-center gap-2"
+            className="w-full py-3 bg-[#262626] border border-[#404040] text-white font-medium rounded-lg hover:bg-[#404040] transition-all flex items-center justify-center gap-2"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -159,7 +159,7 @@ function SignInForm() {
           </Link>
 
           {/* Link para cadastro */}
-          <p className="text-center text-[var(--foreground-muted)] mt-6">
+          <p className="text-center text-[#737373] mt-6">
             Não tem conta?{' '}
             <Link href="/signup" className="text-[var(--accent)] hover:brightness-110 font-medium transition-colors">
               Criar conta
