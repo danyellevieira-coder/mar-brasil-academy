@@ -1,8 +1,9 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { ThemeToggle } from './ThemeToggle'
+import { useTheme } from 'next-themes'
 
 interface User {
   id: string
@@ -19,35 +20,49 @@ interface NavbarProps {
 
 export function Navbar({ user, onLogout }: NavbarProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const { theme, resolvedTheme } = useTheme()
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  const currentTheme = resolvedTheme || theme
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-[var(--background)]/80 backdrop-blur-xl border-b border-[var(--border)]">
       <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-3 group">
-          <div className="w-10 h-10 bg-gradient-to-br from-[var(--accent)] to-[var(--accent-gold)] rounded-lg flex items-center justify-center group-hover:scale-110 transition-transform">
-            <span className="text-white font-bold text-xl">M</span>
+          <div className="h-12 flex items-center justify-center group-hover:scale-105 transition-transform duration-300">
+            {mounted ? (
+              <img
+                src={currentTheme === 'dark' ? '/logo-dark.png' : '/logo-light.png'}
+                alt="Mar Brasil Academy"
+                className="h-full w-auto object-contain"
+              />
+            ) : (
+              <div className="h-10 w-32 bg-[var(--surface-elevated)] animate-pulse rounded-lg" />
+            )}
           </div>
-          <span className="font-bold text-xl tracking-tight hidden sm:block">Mar Brasil Academy</span>
-          <span className="font-bold text-xl tracking-tight sm:hidden">MBA</span>
         </Link>
 
         {/* Desktop Menu */}
         <div className="hidden md:flex items-center gap-4">
           <ThemeToggle />
-          
+
           {user ? (
             <div className="flex items-center gap-4">
               {/* Admin link */}
               {(user.isSuperUser || user.role === 'ADMIN') && (
-                <Link 
-                  href="/admin" 
+                <Link
+                  href="/admin"
                   className="text-[var(--foreground-muted)] hover:text-[var(--foreground)] transition-colors font-medium"
                 >
                   Admin
                 </Link>
               )}
-              
+
               {/* User profile */}
               <div className="flex items-center gap-3 pl-4 border-l border-[var(--border)]">
                 <div className="w-9 h-9 bg-gradient-to-br from-[var(--accent)] to-[var(--accent-gold)] rounded-full flex items-center justify-center shadow-lg shadow-[var(--accent)]/20">
@@ -60,9 +75,9 @@ export function Navbar({ user, onLogout }: NavbarProps) {
                   <p className="text-xs text-[var(--foreground-muted)] max-w-[150px] truncate">{user.email}</p>
                 </div>
               </div>
-              
+
               {/* Logout button */}
-              <button 
+              <button
                 onClick={onLogout}
                 className="text-[var(--foreground-muted)] hover:text-[var(--foreground)] transition-colors p-2 hover:bg-[var(--surface-elevated)] rounded-lg"
                 title="Sair"
@@ -81,8 +96,8 @@ export function Navbar({ user, onLogout }: NavbarProps) {
               <Link href="/signin" className="text-[var(--foreground-muted)] hover:text-[var(--foreground)] transition-colors font-medium">
                 Entrar
               </Link>
-              <Link 
-                href="/signup" 
+              <Link
+                href="/signup"
                 className="px-5 py-2.5 bg-gradient-to-r from-[var(--accent)] to-[var(--accent-gold)] hover:brightness-110 text-white font-bold rounded-xl transition-all shadow-lg shadow-[var(--accent)]/20"
               >
                 Criar Conta
@@ -131,8 +146,8 @@ export function Navbar({ user, onLogout }: NavbarProps) {
 
                 <div className="flex flex-col gap-2">
                   {(user.isSuperUser || user.role === 'ADMIN') && (
-                    <Link 
-                      href="/admin" 
+                    <Link
+                      href="/admin"
                       className="flex items-center gap-3 p-3 rounded-xl hover:bg-[var(--surface-elevated)] transition-colors font-medium text-[var(--foreground)]"
                     >
                       <svg className="w-5 h-5 text-[var(--accent)]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -142,8 +157,8 @@ export function Navbar({ user, onLogout }: NavbarProps) {
                       Painel Administrativo
                     </Link>
                   )}
-                  
-                  <button 
+
+                  <button
                     onClick={onLogout}
                     className="flex items-center gap-3 p-3 rounded-xl hover:bg-red-500/10 text-red-500 hover:text-red-600 transition-colors font-medium w-full text-left"
                   >
@@ -159,14 +174,14 @@ export function Navbar({ user, onLogout }: NavbarProps) {
                 <div className="p-3 bg-[var(--surface-elevated)] rounded-xl text-center text-[var(--foreground-muted)] text-sm">
                   Você está navegando como convidado
                 </div>
-                <Link 
-                  href="/signin" 
+                <Link
+                  href="/signin"
                   className="w-full py-3 bg-[var(--surface-elevated)] border border-[var(--border)] rounded-xl text-center font-bold hover:bg-[var(--border)] transition-colors"
                 >
                   Entrar
                 </Link>
-                <Link 
-                  href="/signup" 
+                <Link
+                  href="/signup"
                   className="w-full py-3 bg-[var(--accent)] text-white rounded-xl text-center font-bold hover:brightness-110 transition-colors"
                 >
                   Criar Conta

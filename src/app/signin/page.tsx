@@ -63,10 +63,14 @@ function SignInForm() {
     <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center px-4 font-sans text-[#fafafa] py-12">
       <div className="w-full max-w-md">
         {/* Logo */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-[var(--accent)]">
-            Mar Brasil Academy
-          </h1>
+        <div className="text-center mb-10">
+          <Link href="/" className="inline-block hover:opacity-90 transition-opacity">
+            <img
+              src="/logo-dark.png"
+              alt="Mar Brasil"
+              className="h-24 mx-auto"
+            />
+          </Link>
           <p className="text-[#737373] mt-2">Acesse sua conta</p>
         </div>
 

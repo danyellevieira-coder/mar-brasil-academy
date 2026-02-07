@@ -28,7 +28,7 @@ export default function SignUpPage() {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
     setFormData(prev => ({ ...prev, [name]: value }))
-    
+
     if (name === 'password') {
       validatePasswordLive(value)
     }
@@ -81,10 +81,14 @@ export default function SignUpPage() {
     <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center px-4 font-sans text-[#fafafa] py-12">
       <div className="w-full max-w-md">
         {/* Logo */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold text-[var(--accent)]">
-            Mar Brasil Academy
-          </h1>
+        <div className="text-center mb-10">
+          <Link href="/" className="inline-block hover:opacity-90 transition-opacity">
+            <img
+              src="/logo-dark.png"
+              alt="Mar Brasil"
+              className="h-24 mx-auto"
+            />
+          </Link>
           <p className="text-[#737373] mt-2">Criar nova conta</p>
         </div>
 
@@ -223,7 +227,7 @@ export default function SignUpPage() {
 
           {/* Guest Button */}
           <Link
-            href="/publico"
+            href="/"
             className="w-full py-3 bg-[#262626] border border-[#404040] text-white font-medium rounded-lg hover:bg-[#404040] transition-all flex items-center justify-center gap-2"
           >
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
