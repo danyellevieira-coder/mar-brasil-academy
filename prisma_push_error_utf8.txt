@@ -1,0 +1,30 @@
+﻿Environment variables loaded from .env
+Prisma schema loaded from prisma\schema.prisma
+Datasource "db": PostgreSQL database "postgres", schema "public" at "aws-1-sa-east-1.pooler.supabase.com:5432"
+
+node.exe : Error: P1000: 
+Authentication failed against 
+database server at `aws-1-sa-east-
+1.pooler.supabase.com`, the 
+provided database credentials for 
+`postgres` are not valid.
+No linha:1 caractere:1
++ & "C:\Program 
+Files\nodejs/node.exe" 
+"C:\Program Files\nodejs/node_mo 
+...
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~
+    + CategoryInfo          : Not 
+   Specified: (Error: P1000: A..  
+  . are not valid.:String) [],    
+ RemoteException
+    + FullyQualifiedErrorId : Nat 
+   iveCommandError
+ 
+
+Please make sure to provide valid 
+database credentials for the 
+database server at `aws-1-sa-east-
+1.pooler.supabase.com`.
