@@ -59,7 +59,7 @@ export default function AdminSidebar() {
             <div className="h-10 flex items-center justify-center group-hover:scale-105 transition-transform duration-300">
               {mounted ? (
                 <img
-                  src={currentTheme === 'dark' ? '/logo-light.png' : '/logo-dark.png'}
+                  src={currentTheme === 'dark' ? '/logo-dark.png' : '/logo-light.png'}
                   alt="Mar Brasil Academy"
                   className="h-full w-auto object-contain"
                 />
@@ -81,8 +81,8 @@ export default function AdminSidebar() {
                 key={item.href}
                 href={item.href}
                 className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${isActive
-                    ? 'bg-[var(--accent)]/10 text-[var(--accent)] border border-[var(--accent)]/30'
-                    : 'text-[var(--foreground-muted)] hover:text-[var(--foreground)] hover:bg-[var(--surface-elevated)]'
+                  ? 'bg-[var(--accent)]/10 text-[var(--accent)] border border-[var(--accent)]/30'
+                  : 'text-[var(--foreground-muted)] hover:text-[var(--foreground)] hover:bg-[var(--surface-elevated)]'
                   }`}
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
