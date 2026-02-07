@@ -3,6 +3,7 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useState, useEffect } from 'react'
+import { useTheme } from 'next-themes'
 
 const navItems = [
   { href: '/admin', label: 'Dashboard', icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6' },
@@ -14,13 +15,20 @@ const navItems = [
 
 export default function AdminSidebar() {
   const pathname = usePathname()
-
+  const { theme, resolvedTheme } = useTheme()
+  const [mounted, setMounted] = useState(false)
   const [isOpen, setIsOpen] = useState(false)
 
   // Close sidebar when navigating on mobile
   useEffect(() => {
     setIsOpen(false)
   }, [pathname])
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  const currentTheme = resolvedTheme || theme
 
   return (
     <>
@@ -36,25 +44,28 @@ export default function AdminSidebar() {
 
       {/* Overlay */}
       {isOpen && (
-        <div 
+        <div
           className="fixed inset-0 bg-black/50 backdrop-blur-sm z-40 md:hidden animate-in fade-in"
           onClick={() => setIsOpen(false)}
         />
       )}
 
       {/* Sidebar */}
-      <aside className={`w-64 bg-[var(--surface)] border-r border-[var(--border)] min-h-screen fixed left-0 top-0 z-50 transition-transform duration-300 md:translate-x-0 ${
-        isOpen ? 'translate-x-0 shadow-2xl' : '-translate-x-full'
-      }`}>
+      <aside className={`w-64 bg-[var(--surface)] border-r border-[var(--border)] min-h-screen fixed left-0 top-0 z-50 transition-transform duration-300 md:translate-x-0 ${isOpen ? 'translate-x-0 shadow-2xl' : '-translate-x-full'
+        }`}>
         {/* Logo */}
-        <div className="h-16 flex items-center px-6 border-b border-[var(--border)]">
-          <Link href="/admin" className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-[var(--accent)] to-[var(--accent-gold)] rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-xl">M</span>
-            </div>
-            <div>
-              <span className="text-[var(--foreground)] font-bold text-lg">Admin</span>
-              <span className="text-[var(--foreground-muted)] text-xs block">Mar Brasil Academy</span>
+        <div className="h-20 flex items-center px-6 border-b border-[var(--border)]">
+          <Link href="/admin" className="flex items-center w-full group">
+            <div className="h-10 flex items-center justify-center group-hover:scale-105 transition-transform duration-300">
+              {mounted ? (
+                <img
+                  src={currentTheme === 'dark' ? '/logo-light.png' : '/logo-dark.png'}
+                  alt="Mar Brasil Academy"
+                  className="h-full w-auto object-contain"
+                />
+              ) : (
+                <div className="h-8 w-32 bg-[var(--surface-elevated)] animate-pulse rounded-lg" />
+              )}
             </div>
           </Link>
         </div>
@@ -62,18 +73,17 @@ export default function AdminSidebar() {
         {/* Navigation */}
         <nav className="p-4 space-y-1">
           {navItems.map((item) => {
-            const isActive = pathname === item.href || 
+            const isActive = pathname === item.href ||
               (item.href !== '/admin' && pathname.startsWith(item.href))
-            
+
             return (
               <Link
                 key={item.href}
                 href={item.href}
-                className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${
-                  isActive
+                className={`flex items-center gap-3 px-4 py-3 rounded-lg transition-all ${isActive
                     ? 'bg-[var(--accent)]/10 text-[var(--accent)] border border-[var(--accent)]/30'
                     : 'text-[var(--foreground-muted)] hover:text-[var(--foreground)] hover:bg-[var(--surface-elevated)]'
-                }`}
+                  }`}
               >
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={item.icon} />

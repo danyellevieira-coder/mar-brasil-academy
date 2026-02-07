@@ -66,7 +66,7 @@ function SignInForm() {
         <div className="text-center mb-10">
           <Link href="/" className="inline-block hover:opacity-90 transition-opacity">
             <img
-              src="/logo-dark.png"
+              src="/logo-light.png"
               alt="Mar Brasil"
               className="h-24 mx-auto"
             />
