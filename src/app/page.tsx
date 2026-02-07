@@ -91,13 +91,13 @@ export default function Home() {
         <section className="mb-16">
           <div className="relative rounded-3xl overflow-hidden border border-[var(--border)] p-12 md:p-20 shadow-2xl">
             {/* Background Image */}
-            <div 
+            <div
               className="absolute inset-0 bg-cover bg-center bg-no-repeat"
               style={{ backgroundImage: 'url(/thumbnails/ar-condicionado.png)' }}
             />
             {/* Dark Overlay for text readability */}
             <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-black/30" />
-            
+
             <div className="relative z-10 max-w-2xl">
               <h1 className="text-4xl md:text-6xl font-black mb-6 leading-tight text-white">
                 Seu Futuro Começa <span className="text-[var(--accent)]">Aqui.</span>
@@ -106,16 +106,20 @@ export default function Home() {
                 Plataforma oficial de treinamentos da Mar Brasil. Conteúdo exclusivo para evolução contínua da nossa equipe.
               </p>
               <div className="flex flex-wrap gap-4">
-                <button className="px-6 py-3 md:px-8 md:py-4 bg-gradient-to-r from-[var(--accent)] to-[var(--accent-gold)] text-white font-bold rounded-xl hover:brightness-110 transition-all flex items-center gap-2 shadow-lg whitespace-nowrap">
-                  <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                <Link
+                  href="#playlists"
+                  className="px-6 py-3 md:px-8 md:py-4 bg-gradient-to-r from-[var(--accent)] to-[var(--accent-gold)] text-white font-bold rounded-xl hover:brightness-110 transition-all flex items-center gap-2 shadow-lg whitespace-nowrap"
+                >
+                  <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
                   Começar agora
-                </button>
+                </Link>
               </div>
             </div>
           </div>
         </section>
 
         {/* Playlists Section */}
+        <div id="playlists" />
         {playlists.length > 0 && playlists.map((playlist) => (
           <section key={playlist.id} className="mb-12">
             <div className="flex flex-col gap-2 mb-8">
@@ -123,12 +127,12 @@ export default function Home() {
                 <h2 className="text-3xl font-black tracking-tight">{playlist.title}</h2>
                 <div className="h-px flex-1 bg-[var(--border)] opacity-50"></div>
               </div>
-              
+
               <div className="flex items-center gap-2 overflow-x-auto [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden mask-linear-fade">
-                { playlist.access && playlist.access.length > 0 ? (
+                {playlist.access && playlist.access.length > 0 ? (
                   playlist.access.map(a => (
-                    <span 
-                      key={a.code} 
+                    <span
+                      key={a.code}
                       className="flex-none px-3 py-1 bg-[var(--accent)]/10 backdrop-blur-md border border-[var(--accent)]/20 text-[var(--accent)] text-[10px] font-bold rounded-full uppercase tracking-widest shadow-sm whitespace-nowrap"
                     >
                       {a.name}
@@ -144,7 +148,7 @@ export default function Home() {
                   {playlist.videos.length} vídeo{playlist.videos.length !== 1 && 's'}
                 </span>
               </div>
-              
+
               {playlist.description && (
                 <p className="text-[var(--foreground-muted)] text-sm max-w-3xl leading-relaxed mt-1">
                   {playlist.description}
