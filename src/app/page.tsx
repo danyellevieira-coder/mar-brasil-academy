@@ -79,6 +79,12 @@ export default function Home() {
     }
   }
 
+  const scrollToPlaylists = () => {
+    const element = document.getElementById('playlists-section');
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  }
 
   return (
     <div className="min-h-screen bg-[var(--background)] text-[var(--foreground)]">
@@ -106,20 +112,20 @@ export default function Home() {
                 Plataforma oficial de treinamentos da Mar Brasil. Conteúdo exclusivo para evolução contínua da nossa equipe.
               </p>
               <div className="flex flex-wrap gap-4">
-                <Link
-                  href="#playlists"
-                  className="px-6 py-3 md:px-8 md:py-4 bg-gradient-to-r from-[var(--accent)] to-[var(--accent-gold)] text-white font-bold rounded-xl hover:brightness-110 transition-all flex items-center gap-2 shadow-lg whitespace-nowrap"
+                <button
+                  onClick={scrollToPlaylists}
+                  className="px-6 py-3 md:px-8 md:py-4 bg-gradient-to-r from-[var(--accent)] to-[var(--accent-gold)] text-white font-bold rounded-xl hover:brightness-110 transition-all flex items-center gap-2 shadow-lg whitespace-nowrap cursor-pointer"
                 >
                   <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M8 5v14l11-7z" /></svg>
                   Começar agora
-                </Link>
+                </button>
               </div>
             </div>
           </div>
         </section>
 
         {/* Playlists Section */}
-        <div id="playlists" />
+        <div id="playlists-section" className="scroll-mt-24" />
         {playlists.length > 0 && playlists.map((playlist) => (
           <section key={playlist.id} className="mb-12">
             <div className="flex flex-col gap-2 mb-8">
