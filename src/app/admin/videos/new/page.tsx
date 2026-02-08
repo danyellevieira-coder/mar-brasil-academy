@@ -27,7 +27,7 @@ export default function NewVideoPage() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [isUserModalOpen, setIsUserModalOpen] = useState(false)
-  
+
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -117,16 +117,23 @@ export default function NewVideoPage() {
       })
 
       if (!res.ok) {
-        const data = await res.json()
-        setError(data.error || 'Erro ao criar vídeo')
+        let errorMessage = 'Erro ao criar vídeo';
+        try {
+          const data = await res.json()
+          errorMessage = data.error || errorMessage;
+        } catch {
+          errorMessage = `Erro ${res.status}: ${res.statusText}`;
+        }
+        setError(errorMessage)
         return
       }
 
       const video = await res.json()
       // Redirect to quiz creation page
       router.push(`/admin/videos/${video.id}/quiz`)
-    } catch {
-      setError('Erro de conexão. Tente novamente.')
+    } catch (err) {
+      console.error('Submit error:', err)
+      setError(`Erro de conexão: ${err instanceof Error ? err.message : 'Verifique sua internet e tente novamente.'}`)
     } finally {
       setLoading(false)
     }
@@ -200,7 +207,7 @@ export default function NewVideoPage() {
             <label className="block text-sm font-medium text-[var(--foreground-secondary)]">
               Thumbnail
             </label>
-            <div 
+            <div
               className="aspect-video bg-slate-900 rounded-lg overflow-hidden border border-[var(--border)] relative group cursor-pointer"
               onClick={() => fileInputRef.current?.click()}
             >
@@ -288,7 +295,7 @@ export default function NewVideoPage() {
           <p className="text-xs text-[var(--foreground-muted)] mb-4">
             Selecione quais departamentos terão acesso a este vídeo. Se nenhum for selecionado, todos poderão ver.
           </p>
-          
+
           {loadingDepts ? (
             <div className="flex items-center gap-2 text-[var(--foreground-muted)] py-4">
               <div className="animate-spin h-5 w-5 border-2 border-[var(--accent)] border-t-transparent rounded-full"></div>
@@ -307,19 +314,17 @@ export default function NewVideoPage() {
                   key={dept.id}
                   type="button"
                   onClick={() => handleDepartmentToggle(dept.id)}
-                  className={`p-4 rounded-lg border text-left transition-all ${
-                    formData.departmentIds.includes(dept.id)
+                  className={`p-4 rounded-lg border text-left transition-all ${formData.departmentIds.includes(dept.id)
                       ? 'bg-[var(--accent)]/10 border-[var(--accent)]/50 text-[var(--accent)]'
                       : 'bg-[var(--surface)] border-[var(--border)] text-[var(--foreground-muted)] hover:border-[var(--border-strong)]'
-                  }`}
+                    }`}
                 >
                   <div className="flex items-center justify-between">
                     <span className="font-medium">{dept.name}</span>
-                    <div className={`w-5 h-5 rounded-full border flex items-center justify-center transition-all flex-shrink-0 ${
-                      formData.departmentIds.includes(dept.id)
+                    <div className={`w-5 h-5 rounded-full border flex items-center justify-center transition-all flex-shrink-0 ${formData.departmentIds.includes(dept.id)
                         ? 'bg-[var(--accent)] border-[var(--accent)]'
                         : 'border-[var(--border-strong)]'
-                    }`}>
+                      }`}>
                       {formData.departmentIds.includes(dept.id) && (
                         <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
@@ -342,7 +347,7 @@ export default function NewVideoPage() {
           <p className="text-xs text-[var(--foreground-muted)] mb-4">
             Além dos departamentos, você pode liberar este vídeo para usuários específicos.
           </p>
-          
+
           <div className="flex items-center gap-3 mb-4">
             <button
               type="button"
@@ -360,7 +365,7 @@ export default function NewVideoPage() {
               </span>
             )}
           </div>
-          
+
           {loadingUsers ? (
             <div className="flex items-center gap-2 text-[var(--foreground-muted)] py-4">
               <div className="animate-spin h-5 w-5 border-2 border-[var(--accent)] border-t-transparent rounded-full"></div>
@@ -379,17 +384,15 @@ export default function NewVideoPage() {
                   key={user.id}
                   type="button"
                   onClick={() => handleUserToggle(user.id)}
-                  className={`p-3 rounded-lg border text-left transition-all flex items-center gap-3 ${
-                    formData.userIds.includes(user.id)
+                  className={`p-3 rounded-lg border text-left transition-all flex items-center gap-3 ${formData.userIds.includes(user.id)
                       ? 'bg-[var(--accent)]/10 border-[var(--accent)]/50 text-[var(--accent)]'
                       : 'bg-[var(--surface)] border-[var(--border)] text-[var(--foreground-muted)] hover:border-[var(--border-strong)]'
-                  }`}
+                    }`}
                 >
-                  <div className={`w-4 h-4 rounded-sm border flex items-center justify-center transition-all flex-shrink-0 ${
-                    formData.userIds.includes(user.id)
+                  <div className={`w-4 h-4 rounded-sm border flex items-center justify-center transition-all flex-shrink-0 ${formData.userIds.includes(user.id)
                       ? 'bg-[var(--accent)] border-blue-500'
                       : 'border-[var(--border-strong)]'
-                  }`}>
+                    }`}>
                     {formData.userIds.includes(user.id) && (
                       <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" />
