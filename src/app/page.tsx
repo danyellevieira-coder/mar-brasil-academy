@@ -99,7 +99,7 @@ export default function Home() {
             {/* Background Image */}
             <div
               className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-              style={{ backgroundImage: 'url(/hero-training.jpg)' }}
+              style={{ backgroundImage: 'url(/hero-mar-brasil.jpg)' }}
             />
             {/* Dark Overlay for text readability */}
             <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/60 to-black/30" />
