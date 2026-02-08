@@ -116,8 +116,8 @@ export default function NewVideoPage() {
           const ctx = canvas.getContext('2d')
           ctx?.drawImage(img, 0, 0, width, height)
 
-          // Compress to JPEG at 0.7 quality
-          resolve(canvas.toDataURL('image/jpeg', 0.7))
+          // Compress to JPEG at 0.5 quality (more aggressive)
+          resolve(canvas.toDataURL('image/jpeg', 0.5))
         }
         img.src = e.target?.result as string
       }
@@ -147,15 +147,30 @@ export default function NewVideoPage() {
     setLoading(true)
 
     try {
-      const res = await fetch('/api/admin/videos', {
+      let res = await fetch('/api/admin/videos', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...formData,
           thumbnail: formData.customThumbnail || getYoutubeThumbnail(formData.youtubeUrl),
-          isPublished: false  // Always false, will publish after quiz
+          isPublished: false
         })
       })
+
+      // If payload too large, try without custom thumbnail
+      if (res.status === 413 && formData.customThumbnail) {
+        console.warn('Payload too large, retrying without custom thumbnail...')
+        res = await fetch('/api/admin/videos', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            ...formData,
+            customThumbnail: '',
+            thumbnail: getYoutubeThumbnail(formData.youtubeUrl),
+            isPublished: false
+          })
+        })
+      }
 
       if (!res.ok) {
         let errorMessage = 'Erro ao criar vídeo';
