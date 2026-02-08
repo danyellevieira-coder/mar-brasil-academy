@@ -44,7 +44,9 @@ export async function GET(
 
     // Se não for admin, verificar permissões
     if (!isAdmin) {
-      const hasRestrictedAccess = video.access.length > 0
+      // Um vídeo é considerado restrito se tiver acessos definidos E nenhum deles for o público (MARBR)
+      const hasPublicAccess = video.access.some(a => a.department.code === 'MARBR')
+      const hasRestrictedAccess = video.access.length > 0 && !hasPublicAccess
       const hasUserAssignment = video.assignedUsers.length > 0
 
       if (hasRestrictedAccess || hasUserAssignment) {
