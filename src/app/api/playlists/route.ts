@@ -6,7 +6,7 @@ import { getAuthUser } from '@/lib/auth'
 export async function GET(request: NextRequest) {
   try {
     const userAuth = await getAuthUser()
-    
+
     // Se for admin ou superuser, não aplica filtros de departamento (vê tudo)
     const isAdmin = userAuth?.isSuperUser || userAuth?.role === 'ADMIN'
 
@@ -17,12 +17,16 @@ export async function GET(request: NextRequest) {
     if (!isAdmin) {
       // Regras estritas para não-admins
       if (!userAuth) {
-        // Deslogado: VER APENAS o que não tem NENHUM depto de acesso
-        where.access = { none: {} }
+        // Deslogado: VER o que não tem depto OU o que tem o depto público (MARBR)
+        where.OR = [
+          { access: { none: {} } },
+          { access: { some: { department: { code: 'MARBR' } } } }
+        ]
       } else {
         // Logado (não-admin): VER o que é público OU o que é do seu depto
         where.OR = [
           { access: { none: {} } },
+          { access: { some: { department: { code: 'MARBR' } } } },
           {
             access: {
               some: {
@@ -94,7 +98,7 @@ export async function GET(request: NextRequest) {
           userProgress: pv.video.progress?.[0] || null
         }))
     }))
-    .filter(p => p.videos.length > 0) // Só mostra playlists com vídeos
+      .filter(p => p.videos.length > 0) // Só mostra playlists com vídeos
 
     return NextResponse.json(formattedPlaylists)
   } catch (error) {
