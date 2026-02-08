@@ -61,20 +61,26 @@ export async function PUT(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id } = await params
   try {
-    const { id } = await params
+    console.log(`[API] PUT /api/admin/videos/${id} - Iniciando atualização`)
+
     const body = await request.json()
+    console.log('[API] Body recebido (tamanho thumbnail):', body.thumbnail?.length || 0)
+
     const { title, description, youtubeUrl, thumbnail, duration, departmentIds, userIds, isPublished, requiresCompletion } = body
 
+    console.log('[API] Limpando acessos antigos...')
     // Deletar acessos antigos e criar novos
     await prisma.videoAccess.deleteMany({
       where: { videoId: id }
     })
-    
+
     await prisma.videoUserAccess.deleteMany({
       where: { videoId: id }
     })
 
+    console.log('[API] Atualizando registro no Prisma...')
     const video = await prisma.video.update({
       where: { id },
       data: {
@@ -120,11 +126,12 @@ export async function PUT(
       }
     })
 
+    console.log('[API] Vídeo atualizado com sucesso:', id)
     return NextResponse.json(video)
-  } catch (error) {
-    console.error('Error updating video:', error)
+  } catch (error: any) {
+    console.error(`[API] Erro CRÍTICO ao atualizar vídeo ${id}:`, error)
     return NextResponse.json(
-      { error: 'Erro ao atualizar vídeo' },
+      { error: `Erro ao atualizar vídeo: ${error.message || 'Erro interno'}` },
       { status: 500 }
     )
   }

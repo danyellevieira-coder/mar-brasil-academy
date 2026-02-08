@@ -36,10 +36,14 @@ export async function GET() {
 // POST /api/admin/videos - Criar novo vídeo
 export async function POST(request: NextRequest) {
   try {
+    console.log('[API] POST /api/admin/videos - Iniciando criação de vídeo')
     const body = await request.json()
+    console.log('[API] Body recebido (tamanho title):', body.title?.length)
+
     const { title, description, youtubeUrl, thumbnail, duration, departmentIds, userIds, isPublished, requiresCompletion } = body
 
     if (!title || !youtubeUrl) {
+      console.warn('[API] Falha de validação: Título ou URL ausente')
       return NextResponse.json(
         { error: 'Título e URL do YouTube são obrigatórios' },
         { status: 400 }
@@ -49,12 +53,14 @@ export async function POST(request: NextRequest) {
     // Extrair ID do vídeo do YouTube
     const youtubeId = extractYoutubeId(youtubeUrl)
     if (!youtubeId) {
+      console.warn('[API] URL do YouTube inválida:', youtubeUrl)
       return NextResponse.json(
         { error: 'URL do YouTube inválida' },
         { status: 400 }
       )
     }
 
+    console.log('[API] Tentando prisma.video.create...')
     const video = await prisma.video.create({
       data: {
         title,
@@ -99,11 +105,15 @@ export async function POST(request: NextRequest) {
       }
     })
 
+    console.log('[API] Vídeo criado com sucesso:', video.id)
     return NextResponse.json(video, { status: 201 })
-  } catch (error) {
-    console.error('Error creating video:', error)
+  } catch (error: any) {
+    console.error('[API] Erro CRÍTICO ao criar vídeo:', error)
+    // Log details if it's a Prisma error
+    if (error.code) console.error('[API] Prisma Error Code:', error.code)
+
     return NextResponse.json(
-      { error: 'Erro ao criar vídeo' },
+      { error: `Erro ao criar vídeo: ${error.message || 'Erro interno'}` },
       { status: 500 }
     )
   }
