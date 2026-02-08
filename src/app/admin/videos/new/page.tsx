@@ -89,14 +89,55 @@ export default function NewVideoPage() {
     }))
   }
 
-  const handleThumbnailUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (file) {
+  const compressImage = (file: File): Promise<string> => {
+    return new Promise((resolve) => {
       const reader = new FileReader()
-      reader.onloadend = () => {
-        setFormData(prev => ({ ...prev, customThumbnail: reader.result as string }))
+      reader.onload = (e) => {
+        const img = new Image()
+        img.onload = () => {
+          const canvas = document.createElement('canvas')
+          let width = img.width
+          let height = img.height
+
+          // Max dimensions for thumbnail: 1280px
+          const maxDim = 1280
+          if (width > maxDim || height > maxDim) {
+            if (width > height) {
+              height = (height / width) * maxDim
+              width = maxDim
+            } else {
+              width = (width / height) * maxDim
+              height = maxDim
+            }
+          }
+
+          canvas.width = width
+          canvas.height = height
+          const ctx = canvas.getContext('2d')
+          ctx?.drawImage(img, 0, 0, width, height)
+
+          // Compress to JPEG at 0.7 quality
+          resolve(canvas.toDataURL('image/jpeg', 0.7))
+        }
+        img.src = e.target?.result as string
       }
       reader.readAsDataURL(file)
+    })
+  }
+
+  const handleThumbnailUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (file) {
+      setLoading(true) // Show loading while compressing
+      try {
+        const compressed = await compressImage(file)
+        setFormData(prev => ({ ...prev, customThumbnail: compressed }))
+      } catch (err) {
+        console.error('Compression error:', err)
+        setError('Erro ao processar imagem.')
+      } finally {
+        setLoading(false)
+      }
     }
   }
 
@@ -315,15 +356,15 @@ export default function NewVideoPage() {
                   type="button"
                   onClick={() => handleDepartmentToggle(dept.id)}
                   className={`p-4 rounded-lg border text-left transition-all ${formData.departmentIds.includes(dept.id)
-                      ? 'bg-[var(--accent)]/10 border-[var(--accent)]/50 text-[var(--accent)]'
-                      : 'bg-[var(--surface)] border-[var(--border)] text-[var(--foreground-muted)] hover:border-[var(--border-strong)]'
+                    ? 'bg-[var(--accent)]/10 border-[var(--accent)]/50 text-[var(--accent)]'
+                    : 'bg-[var(--surface)] border-[var(--border)] text-[var(--foreground-muted)] hover:border-[var(--border-strong)]'
                     }`}
                 >
                   <div className="flex items-center justify-between">
                     <span className="font-medium">{dept.name}</span>
                     <div className={`w-5 h-5 rounded-full border flex items-center justify-center transition-all flex-shrink-0 ${formData.departmentIds.includes(dept.id)
-                        ? 'bg-[var(--accent)] border-[var(--accent)]'
-                        : 'border-[var(--border-strong)]'
+                      ? 'bg-[var(--accent)] border-[var(--accent)]'
+                      : 'border-[var(--border-strong)]'
                       }`}>
                       {formData.departmentIds.includes(dept.id) && (
                         <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -385,13 +426,13 @@ export default function NewVideoPage() {
                   type="button"
                   onClick={() => handleUserToggle(user.id)}
                   className={`p-3 rounded-lg border text-left transition-all flex items-center gap-3 ${formData.userIds.includes(user.id)
-                      ? 'bg-[var(--accent)]/10 border-[var(--accent)]/50 text-[var(--accent)]'
-                      : 'bg-[var(--surface)] border-[var(--border)] text-[var(--foreground-muted)] hover:border-[var(--border-strong)]'
+                    ? 'bg-[var(--accent)]/10 border-[var(--accent)]/50 text-[var(--accent)]'
+                    : 'bg-[var(--surface)] border-[var(--border)] text-[var(--foreground-muted)] hover:border-[var(--border-strong)]'
                     }`}
                 >
                   <div className={`w-4 h-4 rounded-sm border flex items-center justify-center transition-all flex-shrink-0 ${formData.userIds.includes(user.id)
-                      ? 'bg-[var(--accent)] border-blue-500'
-                      : 'border-[var(--border-strong)]'
+                    ? 'bg-[var(--accent)] border-blue-500'
+                    : 'border-[var(--border-strong)]'
                     }`}>
                     {formData.userIds.includes(user.id) && (
                       <svg className="w-3 h-3 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
